@@ -1,0 +1,71 @@
+programa ejercicio01
+procesos
+  proceso recorrerAvenida(ES flores: numero)
+  comenzar
+    repetir 9
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        flores:= flores + 1
+      mover
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robotFlores
+  variables
+    flores: numero
+    valor : numero
+    quienSoy: numero
+  comenzar
+    RecibirMensaje(quienSoy, master)
+    flores := 0
+    recorrerAvenida(flores)
+    EnviarMensaje(quienSoy, master)
+    EnviarMensaje(flores, master)
+  fin
+  robot robotMaster
+  variables
+    max, botMax, bot, valor : numero
+  comenzar
+    max := -1
+    EnviarMensaje(01, bot1)
+    EnviarMensaje(02, bot2)
+    EnviarMensaje(03, bot3)
+    EnviarMensaje(04, bot4)
+    EnviarMensaje(05, bot5)
+    EnviarMensaje(06, bot6)
+    repetir 6
+      RecibirMensaje(bot, *)
+      RecibirMensaje(valor, *)
+      si (valor > max)
+        max := valor
+        botMax := bot 
+    Informar (max, botMax)
+  fin
+variables
+  master : robotMaster
+  bot1: robotFlores
+  bot2: robotFlores
+  bot3: robotFlores
+  bot4: robotFlores
+  bot5: robotFlores
+  bot6: robotFlores
+comenzar
+  AsignarArea(master, ciudad)
+  AsignarArea(bot1, ciudad)
+  AsignarArea(bot2, ciudad)
+  AsignarArea(bot3, ciudad)
+  AsignarArea(bot4, ciudad)
+  AsignarArea(bot5, ciudad)
+  AsignarArea(bot6, ciudad)
+  Iniciar(master, 2,1)
+  Iniciar(bot1, 1,1)
+  Iniciar(bot2, 2,11)
+  Iniciar(bot3, 3,21)
+  Iniciar(bot4, 4,31)
+  Iniciar(bot5, 5,41)
+  Iniciar(bot6, 6,51)
+fin

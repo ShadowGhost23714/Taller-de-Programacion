@@ -1,0 +1,39 @@
+programa Ejercicio1
+procesos
+  proceso recorrerAvenida(ES flores : numero)
+  comenzar
+    flores := 0
+    repetir 99
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        flores := flores + 1
+      mover
+  fin
+  proceso depositar (E flores : numero)
+  comenzar
+    repetir flores
+      depositarFlor
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robot1
+  variables
+    f : numero
+  comenzar
+    recorrerAvenida(f)
+    Informar (f)
+    depositar (f)
+  fin
+variables
+  r1: robot1
+  r2: robot1
+  r3: robot1
+comenzar
+  AsignarArea(r1, ciudad)
+  AsignarArea(r2, ciudad)
+  AsignarArea(r3, ciudad)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 3,1)
+  Iniciar(r3, 5,1)
+fin

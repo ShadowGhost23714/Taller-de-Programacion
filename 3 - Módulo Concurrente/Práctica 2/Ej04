@@ -1,0 +1,82 @@
+programa ejercicio04
+procesos
+  proceso limpiarEsquina (E pos: numero)
+  variables
+    avenida, calle: numero
+  comenzar
+    Random (avenida,25,75)
+    Random (calle,25,75)
+    Pos (avenida, calle)
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+    Pos (1, pos)
+    EnviarMensaje (avenida, jefe)
+    EnviarMensaje (calle, jefe)
+  fin
+areas
+  parada: AreaC (1,1,1,100)
+  cuadrante: AreaPC (25,25,75,75)
+robots
+  robot robotJuntador
+  variables
+    id, tarea: numero
+  comenzar
+    RecibirMensaje (id, jefe)
+    RecibirMensaje (tarea, jefe)  
+    mientras (tarea = 5)
+      limpiarEsquina (PosCa)
+      RecibirMensaje (tarea, jefe)
+  fin
+  robot robotJefe
+  variables
+    bot, avenida, calle: numero
+  comenzar
+    EnviarMensaje (1,juntador01)
+    EnviarMensaje (2,juntador02)
+    EnviarMensaje (3,juntador03)
+    EnviarMensaje (4,juntador04)
+    repetir 20
+      Random (bot,1,4)
+      si (bot = 1)
+        EnviarMensaje (5, juntador01)
+      sino
+        si (bot = 2)
+          EnviarMensaje (5, juntador02)
+        sino
+          si (bot = 3)
+            EnviarMensaje (5, juntador03)
+          sino
+            EnviarMensaje (5, juntador04)
+      RecibirMensaje (avenida, *)
+      RecibirMensaje (calle, *)
+      si (avenida = 50) & (calle = 50)
+        Informar ("Ganador juntador",bot)
+    EnviarMensaje (0,juntador01)
+    EnviarMensaje (0,juntador02)
+    EnviarMensaje (0,juntador03)
+    EnviarMensaje (0,juntador04)
+  fin
+variables
+  jefe: robotJefe
+  juntador01: robotJuntador
+  juntador02: robotJuntador
+  juntador03: robotJuntador
+  juntador04: robotJuntador
+comenzar
+  AsignarArea(jefe, parada)
+  AsignarArea(juntador01, parada)
+  AsignarArea(juntador01, cuadrante)
+  AsignarArea(juntador02, parada)
+  AsignarArea(juntador02, cuadrante)
+  AsignarArea(juntador03, parada)
+  AsignarArea(juntador03, cuadrante)
+  AsignarArea(juntador04, parada)
+  AsignarArea(juntador04, cuadrante)
+  Iniciar(jefe, 1,1)
+  Iniciar(juntador01, 1,25)
+  Iniciar(juntador02, 1,30)
+  Iniciar(juntador03, 1,35)
+  Iniciar(juntador04, 1,40)
+fin

@@ -1,0 +1,64 @@
+programa ejemplo
+procesos
+  proceso recorridoFlores (E esquinas: numero; E pos: numero)
+  comenzar
+    repetir 2
+      repetir esquinas
+        mientras (HayFlorEnLaEsquina)
+          tomarFlor
+        mover
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+      mientras (HayFlorEnLaBolsa)
+        depositarFlor
+      Pos (pos, PosCa + 5)    
+  fin
+  proceso recorridoPapeles (E esquinas: numero; E pos: numero)
+  comenzar
+    repetir 2
+      repetir esquinas
+        mientras (HayPapelEnLaEsquina)
+          tomarPapel
+        mover
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+      mientras (HayPapelEnLaBolsa)
+        depositarPapel
+      Pos (PosAv + 5, pos)    
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robotFlores1
+  comenzar
+    derecha
+    recorridoFlores(15, PosAv)
+  fin
+  robot robotPapeles1
+  comenzar
+    recorridoPapeles(20, PosCa)
+  fin
+  robot robotFlores2
+  comenzar
+    derecha
+    recorridoFlores(30, PosAv)
+  fin
+  robot robotPapeles2
+  comenzar
+    recorridoPapeles(10, PosCa)
+  fin
+variables
+  r1: robotFlores1
+  r2: robotPapeles1
+  r3: robotFlores2
+  r4: robotPapeles2
+comenzar
+  AsignarArea(r1, ciudad)
+  AsignarArea(r2, ciudad)
+  AsignarArea(r3, ciudad)
+  AsignarArea(r4, ciudad)
+  Iniciar(r1, 1,75)
+  Iniciar(r2, 75,80)
+  Iniciar(r3, 70,10)
+  Iniciar(r4, 10,1)
+fin

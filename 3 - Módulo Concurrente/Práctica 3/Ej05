@@ -1,0 +1,88 @@
+programa ejercicio05
+procesos
+  proceso JugarCarrera (ES esquinas: numero)
+  variables
+    av, ca: numero
+    ok: boolean
+  comenzar
+    ok:= F
+    mientras ((ok = F) & (PosCa < 100)) 
+      av:= PosAv
+      ca:= PosCa
+      BloquearEsquina (11, 11)
+      Pos (11, 11)
+      si (HayPapelEnLaEsquina)
+        tomarPapel
+        Pos (av, ca)
+        depositarPapel
+        esquinas:= esquinas + 1
+        mover
+      sino
+        ok:= V
+        Pos (av, ca)
+      LiberarEsquina (11, 11) 
+  fin
+areas
+  pista: AreaP (4,1,10,100)
+  cabina: AreaP (1,1,1,1)
+  fuente: AreaPC (11,11,11,11)
+robots
+  robot robotPapel
+  variables
+    id, esquinas: numero
+  comenzar
+    esquinas:= 0
+    RecibirMensaje (id, coordinador)
+    JugarCarrera (esquinas)
+    EnviarMensaje (id, coordinador)
+    EnviarMensaje (esquinas, coordinador)
+  fin
+  robot robotJefe
+  variables
+    id, bot, max, esquinas: numero
+  comenzar
+    EnviarMensaje (01, corredor01)
+    EnviarMensaje (02, corredor02)
+    EnviarMensaje (03, corredor03)
+    EnviarMensaje (04, corredor04)
+    max:= -1
+    repetir 4
+      RecibirMensaje (id, *)
+      si (id = 01)
+        RecibirMensaje (esquinas, corredor01)
+      sino
+        si (id = 02)
+          RecibirMensaje (esquinas, corredor02)
+        sino
+          si (id = 03)
+            RecibirMensaje (esquinas, corredor03)
+          sino
+            RecibirMensaje (esquinas, corredor04)
+      si (esquinas > max)
+        max:= esquinas
+        bot:= id
+    Informar ("El_Que_Llego_Mas_Lejos_Es_Robot",bot)
+    Informar ("Distancia_De_Cuadras",max)
+  fin
+variables
+  coordinador: robotJefe
+  corredor01: robotPapel
+  corredor02: robotPapel
+  corredor03: robotPapel
+  corredor04: robotPapel
+comenzar
+  AsignarArea(coordinador, cabina)
+  AsignarArea(corredor01, pista)
+  AsignarArea(corredor01, fuente)
+  AsignarArea(corredor02, pista)
+  AsignarArea(corredor02, fuente)
+  AsignarArea(corredor03, pista)
+  AsignarArea(corredor03, fuente)
+  AsignarArea(corredor04, pista)
+  AsignarArea(corredor04, fuente)
+  Iniciar(coordinador, 1,1)
+  Iniciar(corredor01, 4,1)
+  Iniciar(corredor02, 6,1)
+  Iniciar(corredor03, 8,1)
+  Iniciar(corredor04, 10,1)
+fin

@@ -1,0 +1,68 @@
+programa ejemplo
+procesos
+  proceso recorrerLado(ES papeles: numero)
+  comenzar
+    repetir 19
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+        papeles:= papeles + 1
+      mover
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robot1
+  variables
+    papeles : numero
+  comenzar
+    papeles := 0
+    recorrerLado (papeles)
+    Informar (papeles)
+  fin
+  robot robot2
+  variables
+    papeles : numero
+  comenzar
+    derecha
+    papeles := 0
+    recorrerLado (papeles)
+    Informar (papeles)
+  fin
+  robot robot3
+  variables
+    papeles : numero
+  comenzar
+    derecha
+    derecha
+    papeles := 0
+    recorrerLado (papeles)
+    Informar (papeles)
+  fin
+  robot robot4
+  variables
+    papeles : numero
+  comenzar
+    repetir 3
+      derecha
+    papeles := 0
+    recorrerLado (papeles)
+    Informar (papeles)
+  fin
+variables
+  r1: robot1
+  r2: robot2
+  r3: robot3
+  r4: robot4
+comenzar
+  AsignarArea(r1, ciudad)
+  AsignarArea(r2, ciudad)
+  AsignarArea(r3, ciudad)
+  AsignarArea(r4, ciudad)
+  Iniciar(r1, 10,10)
+  Iniciar(r2, 10,30)
+  Iniciar(r3, 30,30)
+  Iniciar(r4, 30,10)
+fin

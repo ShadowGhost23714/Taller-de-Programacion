@@ -1,0 +1,80 @@
+programa ejercicio02
+procesos
+  proceso juntarFloresEsquina (E pos: numero)
+  variables
+    avenida, calle: numero
+  comenzar    
+    repetir 5
+      Random (avenida, 1, 5)
+      Random (calle, 1, 10)
+      BloquearEsquina (avenida, calle)
+      Pos (avenida, calle)
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+      Pos (pos, 10)
+      LiberarEsquina (avenida, calle)
+  fin
+  proceso juntarPapelesEsquina (E pos: numero)
+  variables
+    avenida, calle: numero
+  comenzar    
+    repetir 5
+      Random (avenida, 6, 10)
+      Random (calle, 1, 9)
+      BloquearEsquina (avenida, calle)
+      Pos (avenida, calle)
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+      Pos (pos, 10)
+      LiberarEsquina (avenida, calle)
+  fin
+areas
+  areaFlores: AreaP (1,1,5,10)
+  areaPapeles: AreaP (6,1,10,9)
+  paradaRobots: AreaPC (6,10,10,10)
+robots
+  robot robotFlor
+  variables
+    pos: numero
+  comenzar
+    pos:= PosAv
+    juntarFloresEsquina (pos)
+    BloquearEsquina (10, 10)
+    Pos (10, 10)
+    mientras (HayFlorEnLaBolsa)
+      depositarFlor
+    Pos (pos, 10)
+    LiberarEsquina (10, 10)
+  fin
+  robot robotPapel
+  variables
+    pos: numero
+  comenzar
+    pos:= PosAv
+    juntarPapelesEsquina (pos)
+    BloquearEsquina (10, 10)
+    Pos (10, 10)
+    mientras (HayPapelEnLaBolsa)
+      depositarPapel
+    Pos (pos, 10)
+    LiberarEsquina (10, 10)
+  fin
+variables
+  florero01: robotFlor
+  florero02: robotFlor
+  papelero01: robotPapel
+  papelero02: robotPapel
+comenzar
+  AsignarArea (florero01, areaFlores)
+  AsignarArea (florero01, paradaRobots)
+  AsignarArea (florero02, areaFlores)
+  AsignarArea (florero02, paradaRobots)
+  AsignarArea (papelero01, areaPapeles)
+  AsignarArea (papelero01, paradaRobots)
+  AsignarArea (papelero02, areaPapeles)
+  AsignarArea (papelero02, paradaRobots)
+  Iniciar (florero01, 6,10)
+  Iniciar (florero02, 7,10)
+  Iniciar (papelero01, 8,10)
+  Iniciar (papelero02, 9,10)
+fin

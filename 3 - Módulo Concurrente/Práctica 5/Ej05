@@ -1,0 +1,91 @@
+programa ejercicio05
+procesos
+  proceso Identificar
+  comenzar
+    EnviarMensaje (1, c1)
+    EnviarMensaje (2, c2)
+    EnviarMensaje (3, c3)
+  fin
+  proceso JuntarPapeles (E x: numero; E y: numero)
+  variables
+    papeles: numero
+  comenzar
+    RecibirMensaje (papeles, s)
+    BloquearEsquina (100, 1)
+    Pos (100, 1)
+    repetir papeles
+      tomarPapel
+    Pos (x, y)
+    LiberarEsquina (100, 1)
+  fin
+  proceso DepositarPapeles (E papeles: numero)
+  comenzar
+    BloquearEsquina (100, 1)
+    Pos (100, 1)
+    repetir papeles
+      depositarPapel
+    Pos (13, 1)
+    LiberarEsquina (100, 1)
+  fin
+areas
+  Esquina: AreaC (100,1,100,1)
+  Area1: AreaP (10,1,10,1)
+  Area2: AreaP (11,1,11,1)
+  Area3: AreaP (12,1,12,1)
+  AreaS: AreaP (13,1,13,1)
+robots
+  robot robotCliente
+  variables
+    id: numero
+    x, y: numero
+  comenzar
+    x := PosAv
+    y := PosCa
+    RecibirMensaje (id, s)
+    repetir 4
+      EnviarMensaje (id, s)
+      JuntarPapeles (x, y)
+    EnviarMensaje (0, s)
+  fin
+  robot robotServidor
+  variables
+    id: numero
+    papeles: numero
+    terminado: numero
+  comenzar
+    terminado := 0
+    Identificar
+    mientras (terminado < 3)
+      RecibirMensaje (id, *)
+      si (id = 0)
+        terminado := terminado + 1
+      sino
+        Random (papeles, 1, 5)
+        DepositarPapeles (papeles)
+        si (id = 1)
+          EnviarMensaje (papeles, c1)
+        sino
+          si (id = 2)
+            EnviarMensaje (papeles, c2)
+          sino 
+            EnviarMensaje (papeles, c3)
+  fin
+variables
+  s: robotServidor
+  c1: robotCliente
+  c2: robotCliente
+  c3: robotCliente
+comenzar
+  AsignarArea (s, AreaS)
+  AsignarArea (s, Esquina)
+  AsignarArea (c1, Area1)
+  AsignarArea (c1, Esquina)
+  AsignarArea (c2, Area2)
+  AsignarArea (c2, Esquina)
+  AsignarArea (c3, Area3)
+  AsignarArea (c3, Esquina)
+  Iniciar (s, 13, 1)
+  Iniciar (c1, 10, 1)
+  Iniciar (c2, 11, 1)
+  Iniciar (c3, 12, 1)
+fin

@@ -1,0 +1,78 @@
+programa ejercicio03
+procesos
+  proceso recorrerCallesFlores (ES flores: numero)
+  comenzar
+    repetir 9
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        flores := flores + 1
+      mover
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores := flores + 1
+  fin
+  proceso recorrerCallesPapeles(ES papeles: numero)
+  comenzar
+    repetir 9
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+        papeles := papeles + 1
+      mover
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles := papeles + 1
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robotFlores
+  variables
+    flores: numero
+    id: numero
+  comenzar
+    derecha
+    id := PosAv
+    repetir 2
+      si (id = 1)
+        flores := 0
+        recorrerCallesFlores (flores)
+        EnviarMensaje (flores, A2)
+      sino
+        RecibirMensaje (flores, A1)
+        recorrerCallesFlores (flores)
+        Informar ("flores",flores)
+      Pos (PosAv + 11,PosCa)
+  fin
+  robot robotPapeles
+  variables
+    papeles: numero
+    id: numero
+  comenzar
+    derecha
+    id := PosAv
+    repetir 2
+      si (id = 1)
+        papeles := 0
+        recorrerCallesPapeles (papeles)
+        EnviarMensaje (papeles, B2)
+      sino
+        RecibirMensaje (papeles, B1)
+        recorrerCallesPapeles (papeles)
+        Informar ("papeles",papeles)
+      Pos (PosAv + 11,PosCa)
+  fin
+variables
+  A1: robotFlores
+  A2: robotFlores
+  B1: robotPapeles
+  B2: robotPapeles
+comenzar
+  AsignarArea(A1, ciudad)
+  AsignarArea(A2, ciudad)
+  AsignarArea(B1, ciudad)
+  AsignarArea(B2, ciudad)
+  Iniciar(A1, 1,1)
+  Iniciar(A2, 11,1)
+  Iniciar(B1, 1,5)
+  Iniciar(B2, 11,5)
+fin

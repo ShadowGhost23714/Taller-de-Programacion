@@ -1,0 +1,132 @@
+programa ejercicio04
+procesos
+  proceso JuntarFlores (ES flores: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin
+  proceso JuntarPapeles (ES papeles: numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+areas
+  AreaR1A: AreaP (2,1,2,97)
+  AreaR1B: AreaP (2,100,2,100)
+  AreaR2A: AreaP (3,1,3,97)
+  AreaR2B: AreaP (3,100,3,100)
+  AreaA1A: AreaP (4,98,100,98)
+  AreaA1B: AreaP (1,98,1,98)
+  AreaA2A: AreaP (4,99,100,99)
+  AreaA2B: AreaP (1,99,1,99)
+  Cruce: AreaPC (2,98,3,99)
+  Cabina: AreaC (4,1,4,1)
+robots
+  robot RobotFlores
+  variables
+    id, flores, x: numero
+  comenzar
+    flores:= 0
+    x:= PosAv
+    RecibirMensaje (id, jefe)
+    repetir 96
+      JuntarFlores (flores)
+      mover
+    JuntarFlores (flores)
+    BloquearEsquina (x, 98)
+    mover
+    JuntarFlores (flores)
+    BloquearEsquina (x, 99)
+    mover
+    LiberarEsquina (x, 98)
+    JuntarFlores (flores)
+    mover
+    LiberarEsquina (x, 99)
+    JuntarFlores (flores)
+    EnviarMensaje (id, jefe)
+    EnviarMensaje (flores, jefe)
+  fin
+  robot RobotPapeles
+  variables
+    id, papeles, y: numero
+  comenzar
+    papeles:= 0
+    derecha
+    y:= PosCa
+    RecibirMensaje (id, jefe)
+    JuntarPapeles (papeles)
+    BloquearEsquina (2, y)
+    mover
+    JuntarPapeles (papeles)
+    BloquearEsquina (3, y)
+    mover
+    LiberarEsquina (2, y)
+    JuntarPapeles (papeles)
+    mover
+    LiberarEsquina (3, y)
+    repetir 96
+      JuntarPapeles (papeles)
+      mover
+    JuntarFlores (papeles)
+    EnviarMensaje (id, jefe)
+    EnviarMensaje (papeles, jefe)
+  fin
+  robot master
+  variables
+    id, flores, totalFlores, papeles, totalPapeles: numero
+  comenzar
+    EnviarMensaje (1, r1)
+    EnviarMensaje (2, r2)
+    EnviarMensaje (3, a1)
+    EnviarMensaje (4, a2)
+    totalFlores:= 0
+    totalPapeles:= 0
+    repetir 4
+      RecibirMensaje (id, *)
+      si (id = 1)
+        RecibirMensaje (flores, r1)
+        totalFlores:= totalFlores + flores
+      sino
+        si (id = 2)
+          RecibirMensaje (flores, r2)
+          totalFlores:= totalFlores + flores
+        sino
+          si (id = 3)
+            RecibirMensaje (papeles, a1)
+            totalPapeles:= totalPapeles + papeles
+          sino
+            RecibirMensaje (papeles, a2)
+            totalPapeles:= totalPapeles + papeles
+    si (totalFlores > totalPapeles)
+      Informar (totalFlores)
+    sino 
+      Informar (totalPapeles)
+  fin
+variables
+  jefe: master
+  r1: RobotFlores
+  r2: RobotFlores
+  a1: RobotPapeles
+  a2: RobotPapeles
+comenzar
+  AsignarArea (jefe, Cabina)
+  AsignarArea (r1, AreaR1A)
+  AsignarArea (r1, AreaR1B)
+  AsignarArea (r1, Cruce)
+  AsignarArea (r2, AreaR2A)
+  AsignarArea (r2, AreaR2B)
+  AsignarArea (r2, Cruce)
+  AsignarArea (a1, AreaA1A)
+  AsignarArea (a1, AreaA1B)
+  AsignarArea (a1, Cruce)
+  AsignarArea (a2, AreaA2A)
+  AsignarArea (a2, AreaA2B)
+  AsignarArea (a2, Cruce)
+  Iniciar (jefe, 4,1)
+  Iniciar (r1, 2,1)
+  Iniciar (r2, 3,1)
+  Iniciar (a1, 1,98)
+  Iniciar (a2, 1,99)
+fin

@@ -1,0 +1,86 @@
+programa ejercicio04
+procesos
+  proceso JuntarFlores
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso JuntarPapeles
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso VaciarBolsa
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      depositarPapel
+    mientras (HayPapelEnLaEsquina)
+      depositarPapel
+  fin
+areas
+  Cuadrante: AreaPC (2,2,100,100)
+  Parada: AreaC (1,1,3,1)
+robots
+  robot slave
+  variables
+    avenida, calle: numero
+    id, tarea: numero
+    miAv, miCa: numero
+  comenzar
+    RecibirMensaje (id, m)
+    RecibirMensaje (tarea, m)
+    miAv := PosAv
+    miCa := PosCa
+    mientras (tarea <> 4)
+      RecibirMensaje (avenida, m)
+      RecibirMensaje (calle, m)
+      BloquearEsquina (avenida, calle)
+      Pos (avenida, calle)
+      si (tarea = 1)
+        JuntarFlores
+      sino
+        si (tarea = 2)
+          JuntarPapeles
+        sino
+          VaciarBolsa
+      Pos (miAv, miCa)
+      LiberarEsquina (avenida, calle)
+      RecibirMensaje (tarea, m)
+  fin
+  robot master
+  variables
+    avenida, calle, id, tarea: numero
+  comenzar
+    EnviarMensaje (01, s1)
+    EnviarMensaje (02, s2)
+    repetir 10
+      Random (avenida, 2, 100)
+      Random (calle, 2, 100)
+      Random (id, 1, 2)
+      Random (tarea, 1, 3)
+      si (id = 1)
+        EnviarMensaje (tarea, s1)
+        EnviarMensaje (avenida, s1)
+        EnviarMensaje (calle, s1)
+      sino
+        EnviarMensaje (tarea, s2)
+        EnviarMensaje (avenida, s2)
+        EnviarMensaje (calle, s2)
+    EnviarMensaje (4, s1)
+    EnviarMensaje (4, s2)
+  fin
+variables
+  m: master
+  s1: slave
+  s2: slave
+comenzar
+  AsignarArea(m, Parada)
+  AsignarArea(s1, Parada)
+  AsignarArea(s1, Cuadrante)
+  AsignarArea(s2, Parada)
+  AsignarArea(s2, Cuadrante)
+  Iniciar(m, 1,1)
+  Iniciar(s1, 2,1)
+  Iniciar(s2, 3,1)
+fin
+

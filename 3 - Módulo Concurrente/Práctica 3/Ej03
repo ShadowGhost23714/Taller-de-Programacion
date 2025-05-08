@@ -1,0 +1,94 @@
+programa ejercicio03
+procesos
+  proceso juntarFlor(E avenida: numero; E calle: numero; ES flores: numero)
+  variables
+    pos: numero
+    ok: boolean
+  comenzar
+    pos:= PosAv
+    ok:= F
+    mientras (ok = F)
+      BloquearEsquina (avenida, calle)
+      Pos (avenida, calle)
+      si (HayFlorEnLaEsquina)
+        tomarFlor
+        flores:= flores + 1
+      sino
+        ok:= V
+      Pos (pos, 1)
+      LiberarEsquina (avenida, calle)
+  fin
+areas
+  cuadrante: AreaC (2,2,10,10)
+  parada: AreaC (1,1,5,1)
+robots
+  robot robotFlor
+  variables
+    avenida, calle, flores, id: numero
+  comenzar
+    flores:= 0
+    RecibirMensaje (id, jefe)
+    RecibirMensaje (avenida, jefe)
+    RecibirMensaje (calle, jefe)
+    juntarFlor (avenida, calle, flores)
+    EnviarMensaje (id, jefe)
+    EnviarMensaje (flores, jefe)
+  fin
+  robot robotJefe
+  variables
+    avenida, calle, id, flores, max, bot: numero
+  comenzar
+    max:= -1
+    Random (avenida, 2, 10)
+    Random (calle, 2, 10)
+    EnviarMensaje (01, florero01)
+    EnviarMensaje (02, florero02)
+    EnviarMensaje (03, florero03)
+    EnviarMensaje (04, florero04)
+    EnviarMensaje (avenida, florero01)
+    EnviarMensaje (calle, florero01)
+    EnviarMensaje (avenida, florero02)
+    EnviarMensaje (calle, florero02)
+    EnviarMensaje (avenida, florero03)
+    EnviarMensaje (calle, florero03)
+    EnviarMensaje (avenida, florero04)
+    EnviarMensaje (calle, florero04)
+    repetir 4
+      RecibirMensaje (id, *)
+      si (id = 01)
+        RecibirMensaje (flores, florero01)
+      sino
+        si (id = 02)
+          RecibirMensaje (flores, florero02)
+        sino
+          si (id = 03)
+            RecibirMensaje (flores, florero03)
+          sino
+            RecibirMensaje (flores, florero04)
+      si (flores > max)
+        max:= flores
+        bot:= id
+    Informar (bot, max)
+  fin
+variables
+  jefe: robotJefe
+  florero01: robotFlor
+  florero02: robotFlor
+  florero03: robotFlor
+  florero04: robotFlor
+comenzar
+  AsignarArea(jefe, parada)
+  AsignarArea(florero01, parada)
+  AsignarArea(florero01, cuadrante)
+  AsignarArea(florero02, parada)
+  AsignarArea(florero02, cuadrante)
+  AsignarArea(florero03, parada)
+  AsignarArea(florero03, cuadrante)
+  AsignarArea(florero04, parada)
+  AsignarArea(florero04, cuadrante)
+  Iniciar(jefe, 1,1)
+  Iniciar(florero01, 2,1)
+  Iniciar(florero02, 3,1)
+  Iniciar(florero03, 4,1)
+  Iniciar(florero04, 5,1)
+fin

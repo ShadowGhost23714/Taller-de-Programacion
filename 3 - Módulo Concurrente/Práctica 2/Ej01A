@@ -1,0 +1,42 @@
+programa ejercicio01
+procesos
+  proceso recorrerAvenida(ES flores: numero)
+  comenzar
+    repetir 9
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        flores:= flores + 1
+      mover
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robotFlores
+  variables
+    flores : numero
+    valor : numero
+    quienSoy: numero
+  comenzar
+    flores := 0
+    quienSoy:= PosAv
+    recorrerAvenida(flores)
+    si (quienSoy = 1)
+      EnviarMensaje (flores, bot2)
+    sino
+      EnviarMensaje (flores, bot1)
+    RecibirMensaje (valor, *)
+    si (flores > valor)
+      Informar(flores - valor)
+  fin
+variables
+  bot1: robotFlores
+  bot2: robotFlores
+comenzar
+  AsignarArea(bot1, ciudad)
+  AsignarArea(bot2, ciudad)
+  Iniciar(bot1, 1,1)
+  Iniciar(bot2, 2,11)
+fin

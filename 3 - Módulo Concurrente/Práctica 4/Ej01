@@ -1,0 +1,102 @@
+programa ejercicio01
+procesos
+  proceso identificar
+  comenzar
+    EnviarMensaje(1, cliente01)
+    EnviarMensaje(2, cliente02)
+    EnviarMensaje(3, cliente03)
+  fin
+  proceso avanzarDejandoFlores
+  comenzar
+    mientras ((HayFlorEnLaBolsa) & (PosCa<100))
+      depositarFlor 
+      mover
+    si(HayFlorEnLaBolsa) & (PosCa = 100)
+      depositarFlor
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robotCliente
+  variables
+    id, flores, x, y: numero
+    ok: boolean
+  comenzar
+    RecibirMensaje (id, servidor)
+    mientras (PosCa < 100) 
+      Random(flores, 1, 4)
+      EnviarMensaje (id, servidor)
+      EnviarMensaje (flores, servidor)
+      x:= PosAv
+      y:= PosCa + 1
+      EnviarMensaje (x, servidor)
+      EnviarMensaje (y, servidor)
+      RecibirMensaje (ok, servidor)
+      Pos (x, y)
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+      Pos (x, y-1)
+      avanzarDejandoFlores
+    EnviarMensaje (id, servidor)
+    EnviarMensaje (0, servidor)
+  fin
+  robot robotServidor
+  variables
+    id, flores, cant: numero
+    avenida: numero
+    calle: numero
+    ok: boolean
+  comenzar
+    identificar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+    cant:= 0
+    mientras (cant < 3)
+      RecibirMensaje (id, *)
+      si (id = 1)
+        RecibirMensaje (flores, cliente01)
+      sino
+        si (id = 2)
+          RecibirMensaje (flores, cliente02)
+        sino
+          RecibirMensaje (flores, cliente03)
+      si (flores <> 0)
+        si (id = 1)
+          RecibirMensaje (avenida, cliente01)
+          RecibirMensaje (calle, cliente01)
+        sino
+          si (id = 2)
+            RecibirMensaje (avenida, cliente02)
+            RecibirMensaje (calle, cliente02)
+          sino
+            RecibirMensaje (avenida, cliente03)
+            RecibirMensaje (calle, cliente03)
+        Pos (avenida, calle)
+        repetir flores
+          depositarFlor
+        Pos (100, 100)
+        si (id = 1)
+          EnviarMensaje (ok, cliente01)
+        sino
+          si (id = 2)
+            EnviarMensaje (ok, cliente02)
+          sino
+            EnviarMensaje (ok, cliente03)
+      sino
+        cant:= cant + 1
+  fin
+variables
+  servidor: robotServidor
+  cliente01: robotCliente
+  cliente02: robotCliente
+  cliente03: robotCliente
+comenzar
+  AsignarArea(servidor, ciudad)
+  AsignarArea(cliente01, ciudad)
+  AsignarArea(cliente02, ciudad)
+  AsignarArea(cliente03, ciudad)
+  Iniciar(servidor, 100,100)
+  Iniciar(cliente01, 1,1)
+  Iniciar(cliente02, 2,1)
+  Iniciar(cliente03, 3,1)
+fin

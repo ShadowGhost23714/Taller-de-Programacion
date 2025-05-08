@@ -1,0 +1,183 @@
+programa ejercicio06
+procesos
+  proceso RecorrerCuadranteFlor (E lado: numero)
+  variables
+    pos: numero
+  comenzar
+    pos:= PosCa
+    BloquearEsquina (PosAv, PosCa)
+    repetir lado
+      repetir lado
+        mientras (HayFlorEnLaEsquina)
+          tomarFlor
+        BloquearEsquina (PosAv, PosCa+1)
+        mover
+        LiberarEsquina (PosAv, PosCa-1)
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+      Pos (PosAv+1, pos)
+    repetir lado
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+      BloquearEsquina (PosAv, PosCa+1)
+      mover
+      LiberarEsquina (PosAv, PosCa-1)
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso RecorrerCuadranteAmbos (E lado: numero)
+  variables
+    pos: numero
+  comenzar
+    pos:= PosCa
+    BloquearEsquina (PosAv, PosCa)
+    repetir lado
+      repetir lado
+        mientras (HayFlorEnLaEsquina)
+          tomarFlor
+        mientras (HayPapelEnLaEsquina)
+          tomarPapel
+        BloquearEsquina (PosAv, PosCa+1)
+        mover
+        LiberarEsquina (PosAv, PosCa-1)
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+      Pos (PosAv+1, pos)
+    repetir lado
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+      BloquearEsquina (PosAv, PosCa+1)
+      mover
+      LiberarEsquina (PosAv, PosCa-1)
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso RecorrerCuadrantePapel (E lado: numero)
+  variables
+    pos: numero
+  comenzar
+    pos:= PosCa
+    BloquearEsquina (PosAv, PosCa)
+    repetir lado
+      repetir lado
+        mientras (HayPapelEnLaEsquina)
+          tomarPapel
+        BloquearEsquina (PosAv, PosCa+1)
+        mover
+        LiberarEsquina (PosAv, PosCa-1)
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+      Pos (PosAv+1, pos)
+    repetir lado
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+      BloquearEsquina (PosAv, PosCa+1)
+      mover
+      LiberarEsquina (PosAv, PosCa-1)
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+areas
+  cabina: AreaP (1,1,1,1)
+  area01: AreaPC (2,2,8,8)
+  area02A: AreaP (5,9,8,15)
+  area02B: AreaP (9,5,15,8)
+  area03: AreaPC (9,9,16,16)
+  pista01: AreaP (1,20,100,20)
+  pista02: AreaP (1,21,100,21)
+  pista03: AreaP (1,22,100,22)
+robots
+  robot robotFlor
+  variables
+    id, lado, ca: numero
+  comenzar
+    RecibirMensaje (id, fiscalizador)
+    RecibirMensaje (lado, fiscalizador)
+    RecorrerCuadranteFlor (lado)
+    EnviarMensaje (id, fiscalizador)
+    RecibirMensaje (ca, fiscalizador)
+    Pos (1, ca)
+    derecha
+    mientras (HayFlorEnLaBolsa) & (PosAv < 100)
+      depositarFlor
+      mover
+  fin
+  robot robotAmbos
+  variables
+    id, lado, ca: numero
+  comenzar
+    RecibirMensaje (id, fiscalizador)
+    RecibirMensaje (lado, fiscalizador)
+    RecorrerCuadranteAmbos (lado)
+    EnviarMensaje (id, fiscalizador)
+    RecibirMensaje (ca, fiscalizador)
+    Pos (1, ca)
+    derecha
+    mientras (HayFlorEnLaBolsa) & (HayPapelEnLaBolsa) & (PosAv < 100)
+      depositarFlor
+      depositarPapel
+      mover
+  fin
+  robot robotPapel
+  variables
+    id, lado, ca: numero
+  comenzar
+    RecibirMensaje (id, fiscalizador)
+    RecibirMensaje (lado, fiscalizador)
+    RecorrerCuadrantePapel (lado)
+    EnviarMensaje (id, fiscalizador)
+    RecibirMensaje (ca, fiscalizador)
+    Pos (1, ca)
+    derecha
+    mientras (HayPapelEnLaBolsa) & (PosAv < 100)
+      depositarPapel
+      mover
+  fin
+  robot robotJefe
+  variables
+    id: numero
+    ok: boolean
+  comenzar
+    EnviarMensaje (01, robot01)
+    EnviarMensaje (02, robot02)
+    EnviarMensaje (03, robot03)
+    EnviarMensaje (6, robot01)
+    EnviarMensaje (10, robot02)
+    EnviarMensaje (7, robot03)
+    repetir 3
+      RecibirMensaje (id, *)
+      si (id = 01)
+        EnviarMensaje (20, robot01)
+      sino
+        si (id = 02)
+          EnviarMensaje (21, robot02)
+        sino
+          EnviarMensaje (22, robot03)
+  fin
+variables
+  fiscalizador: robotJefe
+  robot01: robotFlor
+  robot02: robotAmbos
+  robot03: robotPapel
+comenzar
+  AsignarArea(fiscalizador, cabina)
+  AsignarArea(robot01, area01)
+  AsignarArea(robot01, pista01)
+  AsignarArea(robot02, area02A)
+  AsignarArea(robot02, area02B)
+  AsignarArea(robot02, area01)
+  AsignarArea(robot02, area03)
+  AsignarArea(robot02, pista02)
+  AsignarArea(robot03, area03)
+  AsignarArea(robot03, pista03)
+  Iniciar(fiscalizador, 1,1)
+  Iniciar(robot01, 2,2)
+  Iniciar(robot02, 5,5)
+  Iniciar(robot03, 9,9)
+fin

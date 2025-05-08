@@ -1,0 +1,74 @@
+programa ejercicio02
+procesos
+  proceso juntarFloresPapeles (ES flores: numero; ES papeles: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores := flores + 1
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles := papeles + 1
+  fin
+  proceso recorrerEscalera(ES cant: numero)
+  variables
+    flores, papeles, valor: numero
+  comenzar
+    flores := 0
+    papeles := 0
+    repetir 4
+      Random (valor, 1,5)
+      repetir valor
+        juntarFloresPapeles (flores, papeles)
+        mover
+      derecha
+      juntarFloresPapeles (flores, papeles)
+      mover
+      repetir 3
+        derecha
+      si (flores > papeles)
+        cant := cant + 1
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot juntador
+  variables
+    cant, id: numero
+  comenzar
+    RecibirMensaje (id, jefe)
+    cant := 0
+    recorrerEscalera(cant)
+    EnviarMensaje (id, jefe)
+    EnviarMensaje (cant, jefe)
+  fin
+  robot master
+  variables
+    max, botMax, valor, bot : numero
+  comenzar
+    EnviarMensaje (01, bot1)
+    EnviarMensaje (02, bot2)
+    EnviarMensaje (03, bot3)
+    max := -1
+    repetir 3
+      RecibirMensaje (bot, *)
+      RecibirMensaje (valor, *)
+      si (valor > max)
+        max := valor
+        botMax := bot
+    Informar ("botardo",botMax,max)
+  fin
+variables
+  jefe: master
+  bot1: juntador
+  bot2: juntador
+  bot3: juntador
+comenzar
+  AsignarArea(jefe, ciudad)
+  AsignarArea(bot1, ciudad)
+  AsignarArea(bot2, ciudad)
+  AsignarArea(bot3, ciudad)
+  Iniciar(jefe, 1,1)
+  Iniciar(bot1, 2,1)
+  Iniciar(bot2, 7,1)
+  Iniciar(bot3, 12,1)
+fin

@@ -1,0 +1,100 @@
+programa parcial01
+procesos
+  proceso HacerEscalon (E largo: numero; ES esquinas: numero)
+  comenzar
+    repetir largo
+      si (HayPapelEnLaEsquina)
+        JuntarPapeles
+        esquinas:= esquinas + 1
+      mover
+  fin
+  proceso JuntarPapeles
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso RealizarAltoAncho (ES esquinas: numero)
+  variables
+    alto, ancho: numero
+  comenzar
+    Random (alto, 1, 3)
+    Random (ancho, 2, 4)
+    HacerEscalon (alto, esquinas)
+    derecha
+    HacerEscalon (ancho, esquinas)
+    repetir 3
+      derecha
+  fin
+  proceso HacerEscalera (ES esquinas: numero)
+  variables
+    x, y: numero 
+    ok: boolean
+  comenzar
+    RealizarAltoAncho (esquinas)
+    x:= PosAv
+    y:= PosCa
+    BloquearEsquina (99, 99)
+    Pos (99, 99)
+    mientras (HayPapelEnLaBolsa)
+      depositarPapel
+    Pos (x, y)
+    LiberarEsquina (99, 99)
+    EnviarMensaje (V, jefe)
+    RecibirMensaje (ok, jefe)
+  fin
+areas
+  esquina: AreaC (99,99,99,99)
+  areaJ: AreaP (1,1,1,1)
+  area1: AreaP (2,1,31,100)
+  area2: AreaP (32,1,61,100)
+  area3: AreaP (62,1,91,100)
+robots
+  robot robotPapel
+  variables
+    esquinas: numero
+  comenzar
+    esquinas:= 0
+    repetir 4
+      HacerEscalera (esquinas)
+    EnviarMensaje (esquinas, jefe)
+  fin
+  robot robotJefe
+  variables
+    esquinas, total, papeles: numero
+    ok: boolean
+  comenzar
+    total:= 0
+    repetir 4
+      repetir 3
+        RecibirMensaje (ok, *)
+      EnviarMensaje (V, r1)
+      EnviarMensaje (V, r2)
+      EnviarMensaje (V,r3)
+    repetir 3
+      RecibirMensaje (esquinas, *)
+      total:= total + esquinas
+    Pos (99, 99)
+    papeles:= 0
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+    Informar ("papeles",papeles)
+    Informar ("esquinas",total)
+  fin
+variables
+  jefe: robotJefe
+  r1, r2, r3: robotPapel
+comenzar
+  AsignarArea (jefe, areaJ)
+  AsignarArea (jefe, esquina)
+  AsignarArea (r1, area1)
+  AsignarArea (r1, esquina)
+  AsignarArea (r2, area2)
+  AsignarArea (r2, esquina)
+  AsignarArea (r3, area3)
+  AsignarArea (r3, esquina)
+  Iniciar (jefe, 1,1)
+  Iniciar (r1, 2,1)
+  Iniciar (r2, 32,1)
+  Iniciar (r3, 62,1)
+fin

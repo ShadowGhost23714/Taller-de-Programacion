@@ -1,0 +1,160 @@
+programa parcial03
+procesos
+  proceso identificar
+  comenzar
+    EnviarMensaje (1, Colapinto)
+    EnviarMensaje (2, r2)
+    EnviarMensaje (3, r3)
+    EnviarMensaje (4, r4)
+  fin
+  proceso VaciarBolsa
+  comenzar
+    mientras (HayFlorEnLaBolsa)
+      depositarFlor
+    mientras (HayPapelEnLaBolsa)
+      depositarPapel
+  fin
+  proceso DejarFlores
+  variables
+    x, y: numero
+  comenzar
+    x:= PosAv
+    y:= PosCa
+    mientras (HayFlorEnLaBolsa)
+      BloquearEsquina (1, 6)
+      Pos (1, 6)
+      depositarFlor
+      Pos (x, y)
+      LiberarEsquina (1, 6)
+  fin
+  proceso DejarPapeles
+  variables
+    x, y: numero
+  comenzar
+    x:= PosAv
+    y:= PosCa
+    mientras (HayPapelEnLaBolsa)
+      BloquearEsquina (1, 6)
+      Pos (1, 6)
+      depositarPapel
+      Pos (x, y)
+      LiberarEsquina (1, 6)
+  fin
+  proceso JuntarFlores
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso JuntarPapeles
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso Evaluar (E id: numero; E ok: boolean) 
+  comenzar
+    si id = 1
+      EnviarMensaje (ok, Colapinto)
+    sino
+      si id = 2
+        EnviarMensaje (ok, r2)
+      sino
+        si id = 3
+          EnviarMensaje (ok, r3)
+        sino
+          EnviarMensaje (ok, r4)
+  fin
+  proceso EmpezarCarrera (E id: numero; E ok: boolean)
+  comenzar
+    si id = 1
+      EnviarMensaje (ok, r2)
+      EnviarMensaje (ok, r3)
+      EnviarMensaje (ok, r4)
+    sino
+      si id = 2
+        EnviarMensaje (ok, Colapinto)
+        EnviarMensaje (ok, r3)
+        EnviarMensaje (ok, r4)
+      sino
+        si id = 3
+          EnviarMensaje (ok, Colapinto)
+          EnviarMensaje (ok, r2)
+          EnviarMensaje (ok, r4)
+        sino
+          EnviarMensaje (ok, Colapinto)
+          EnviarMensaje (ok, r2)
+          EnviarMensaje (ok, r3)
+  fin
+areas
+  esquina: AreaC (1,6,1,6)
+  areaJ: AreaP (1,5,1,5)
+  area1: AreaP (1,1,20,1)
+  area2: AreaP (1,2,20,2)
+  area3: AreaP (1,3,20,3)
+  area4: AreaP (1,4,20,4)
+robots
+  robot robotCorredor
+  variables
+    id: numero
+    ok: boolean
+  comenzar
+    VaciarBolsa
+    derecha
+    RecibirMensaje (id, jefe)
+    EmpezarCarrera (id, V)
+    repetir 3
+      RecibirMensaje (ok, *)
+    Pos (PosAv+1, PosCa)
+    repetir 18
+      JuntarFlores
+      mover
+    JuntarFlores
+    DejarFlores
+    EnviarMensaje (id, jefe)
+    RecibirMensaje (ok, jefe)
+    si ok
+      EmpezarCarrera (id, V)
+      RecibirMensaje (ok, *)
+      derecha
+      derecha
+      repetir 18
+        JuntarPapeles
+        mover
+      JuntarPapeles
+      EnviarMensaje (id, jefe)
+  fin
+  robot robotJefe
+  variables
+    id, ganador: numero
+    ok: boolean
+  comenzar
+    identificar
+    repetir 2
+      RecibirMensaje (id, *)
+      Evaluar (id, V)
+    repetir 2
+      RecibirMensaje (id, *)
+      Evaluar (id, F)
+    RecibirMensaje (ganador, *)
+    RecibirMensaje (id, *)
+    Informar ("El_Ganador_Es_El_Robot",ganador)
+  fin
+variables
+  jefe: robotJefe
+  Colapinto, r2, r3, r4: robotCorredor
+comenzar
+  AsignarArea (jefe, areaJ)
+  AsignarArea (jefe, esquina)
+  AsignarArea (Colapinto, area1)
+  AsignarArea (Colapinto, esquina)
+  AsignarArea (r2, area2)
+  AsignarArea (r2, esquina)
+  AsignarArea (r3, area3)
+  AsignarArea (r3, esquina)
+  AsignarArea (r4, area4)
+  AsignarArea (r4, esquina)
+  Iniciar (jefe, 1,5)
+  Iniciar (Colapinto, 1,1)
+  Iniciar (r2, 1,2)
+  Iniciar (r3, 1,3)
+  Iniciar (r4, 1,4)
+fin

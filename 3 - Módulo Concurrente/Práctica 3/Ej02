@@ -1,0 +1,97 @@
+programa ejercicio02
+procesos
+  proceso hacerEscalonFlores (E largo: numero)
+  comenzar    
+    repetir largo
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+      mover
+    derecha
+    repetir largo
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+      mover
+    repetir 3
+      derecha
+  fin
+  proceso hacerEscalonPapeles (E largo: numero)
+  comenzar    
+    repetir largo
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+      mover
+    repetir 3
+      derecha
+    repetir largo
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+      mover
+    derecha
+  fin
+areas
+  pista: AreaC (1,1,100,100)
+robots
+  robot robotFlor
+  variables
+    largo: numero
+    id: numero
+  comenzar
+    id:= 1
+    largo:= 5
+    repetir 4
+      hacerEscalonFlores (largo)
+      largo:= largo - 1
+    BloquearEsquina (16, 16)
+    hacerEscalonFlores (largo)
+    repetir 3
+      derecha
+    mover
+    LiberarEsquina (16, 16)
+    largo:= 2
+    repetir 4
+      hacerEscalonFlores (largo)
+      largo:= largo + 1
+    EnviarMensaje (id, jefe)
+  fin
+  robot robotPapel
+  variables
+    largo: numero
+    id: numero
+  comenzar
+    id:= 2
+    largo:= 5
+    repetir 4
+      hacerEscalonPapeles (largo)
+      largo:= largo - 1
+    BloquearEsquina (16, 16)
+    hacerEscalonPapeles (largo)
+    derecha
+    mover
+    LiberarEsquina (16, 16)
+    largo:= 2
+    repetir 4
+      hacerEscalonPapeles (largo)
+      largo:= largo + 1
+    EnviarMensaje (id, jefe)
+  fin
+  robot robotJefe
+  variables
+    bot: numero
+  comenzar
+    RecibirMensaje (bot, *)
+    Informar ("Ganador",bot)
+    RecibirMensaje (bot, *)
+    Informar ("Perdedor",bot)
+  fin
+variables
+  jefe: robotJefe
+  florero01: robotFlor
+  papelero01: robotPapel
+comenzar
+  AsignarArea (jefe, pista)
+  AsignarArea (florero01, pista)
+  AsignarArea (papelero01, pista)
+  Iniciar (jefe, 15,1)
+  Iniciar (florero01, 1,1)
+  Iniciar (papelero01, 31,1)
+fin

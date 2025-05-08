@@ -1,0 +1,71 @@
+programa ejercicio04
+procesos
+  proceso juntarFlor
+  variables
+    pos: numero
+    ok: boolean
+  comenzar
+    pos:= PosCa
+    ok:= F
+    mientras (ok = F)
+      BloquearEsquina (10, 10)
+      Pos (10, 10)
+      si (HayFlorEnLaEsquina)
+        tomarFlor
+        Pos (9, pos)
+        LiberarEsquina (10, 10)
+        BloquearEsquina (11, 11)
+        Pos (11, 11)
+        depositarFlor
+        Pos (9, pos)
+        LiberarEsquina (11, 11)
+      sino
+        ok:= V
+        Pos (9, pos)
+        LiberarEsquina (10, 10) 
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robotFlor
+  variables
+    id: numero
+  comenzar
+    RecibirMensaje (id, jefe)
+    juntarFlor
+    EnviarMensaje (id, jefe)
+  fin
+  robot robotJefe
+  variables
+    id, bot: numero
+  comenzar
+    EnviarMensaje (01, florero01)
+    EnviarMensaje (02, florero02)
+    EnviarMensaje (03, florero03)
+    EnviarMensaje (04, florero04)
+    repetir 4
+      RecibirMensaje (id, *)
+      bot:= id
+    Informar ("El_Ultimo_Es_Robot",bot)
+    Pos (11, 11)
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+variables
+  jefe: robotJefe
+  florero01: robotFlor
+  florero02: robotFlor
+  florero03: robotFlor
+  florero04: robotFlor
+comenzar
+  AsignarArea(jefe, ciudad)
+  AsignarArea(florero01, ciudad)
+  AsignarArea(florero02, ciudad)
+  AsignarArea(florero03, ciudad)
+  AsignarArea(florero04, ciudad)
+  Iniciar(jefe, 1,1)
+  Iniciar(florero01, 9,9)
+  Iniciar(florero02, 9,10)
+  Iniciar(florero03, 9,11)
+  Iniciar(florero04, 9,12)
+fin

@@ -1,0 +1,107 @@
+programa ejercicio03
+procesos
+  proceso DepositarFlores (ES flores: numero)
+  variables
+    x, y: numero
+  comenzar
+    x := PosAv
+    y := PosCa
+    BloquearEsquina (10, 10)
+    Pos (10, 10)
+    mientras (HayFlorEnLaBolsa)
+      depositarFlor
+    Pos (x, y)
+    LiberarEsquina (10, 10)
+    flores := 0
+  fin
+  proceso RecorrerCalle
+  variables
+    flores, esquinas: numero
+    ok: boolean
+  comenzar
+    flores := 0
+    esquinas := 0
+    EnviarMensaje (V, rc)
+    repetir 99
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        flores := flores + 1
+        si (flores = 10)
+          DepositarFlores (flores)
+          EnviarMensaje (V, rc)
+      esquinas := esquinas + 1
+      si (esquinas  = 15)
+        DepositarFlores (flores)
+        EnviarMensaje (V, rc)
+        esquinas := 0
+      mover
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores := flores + 1
+      si (flores = 10)
+        DepositarFlores (flores)
+        EnviarMensaje (V, rc)
+    esquinas := esquinas + 1
+    si (esquinas  = 15)
+      DepositarFlores (flores)
+      EnviarMensaje (V, rc)
+      esquinas := 0
+  fin
+areas
+  AreaR1: AreaP (1,3,100,3)
+  AreaR2: AreaP (1,4,100,4)
+  Esquina: AreaC (10,10,10,10)
+  Cabina: AreaP (1,5,1,5)
+robots
+  robot RobotFlores
+  comenzar
+    EnviarMensaje (V, rc)
+    derecha
+    RecorrerCalle
+    EnviarMensaje (F, rc)
+  fin
+  robot RobotCosechador
+  variables
+    id, flores: numero
+    x, y : numero
+    cosechar: boolean
+    ok1, ok2: boolean
+  comenzar
+    RecibirMensaje (ok1, *)
+    RecibirMensaje (ok2, *)
+    flores := 0
+    x := PosAv
+    y := PosCa
+    mientras (ok1) | (ok2)
+      RecibirMensaje (cosechar, *)
+      si (cosechar)
+        BloquearEsquina(10, 10)
+        Pos(10, 10)
+        mientras(HayFlorEnLaEsquina)
+          tomarFlor
+          flores := flores + 1
+        Pos(x, y)
+        LiberarEsquina(10, 10)
+      sino
+        si (ok1)
+          ok1 := F
+        sino
+          si (ok2)
+            ok2 := F
+    Informar ("Flores",flores)
+  fin
+variables
+  rc: RobotCosechador
+  r1: RobotFlores
+  r2: RobotFlores
+comenzar
+  AsignarArea (rc, Cabina)
+  AsignarArea (rc, Esquina)
+  AsignarArea (r1, AreaR1)
+  AsignarArea (r1, Esquina)
+  AsignarArea (r2, AreaR2)
+  AsignarArea (r2, Esquina)
+  Iniciar (rc, 1,5)
+  Iniciar (r1, 1,3)
+  Iniciar (r2, 1,4)
+fin
